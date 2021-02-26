@@ -26,10 +26,14 @@ class WallpaperJobService : JobService() {
     private val NOTIFICATION_ID = 0
     private val CHANNEL_ID = "main"
 
+    private val serviceLocator by lazy { (applicationContext as HackerWallApp).serviceLocator }
+
     override fun onStartJob(params: JobParameters): Boolean {
-        val time  = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss"))
+        val time = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss a"))
         val date = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
-        EventBus.getDefault().post(Event.WallpaperJobFire("$date $time"))
+        serviceLocator.providesStorageManager().wallpaperJobLastRun = "$date $time"
+
+        EventBus.getDefault().post(Event.WallpaperJobFire)
 
         showNotification()
         work()
@@ -42,7 +46,6 @@ class WallpaperJobService : JobService() {
     }
 
     private fun work() {
-        val serviceLocator = (applicationContext as HackerWallApp).serviceLocator
         val wallpaperManager = serviceLocator.providesWallpaperManager()
         val imageManager = serviceLocator.providesImageManager()
         imageManager.getWallpaper {

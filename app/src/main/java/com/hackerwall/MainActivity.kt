@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
 
         initUi()
         work()
-
         EventBus.getDefault().register(this)
     }
 
@@ -55,15 +54,24 @@ class MainActivity : AppCompatActivity() {
 
     @Subscribe
     fun handleEvent(event: Event.WallpaperJobFire) {
-        timestampTextView.fadeOut()
-        timestampTextView.text = "Last run: ${event.date}"
-        timestampTextView.fadeIn()
+        setWallpaperLastRun()
     }
 
     private fun work() {
         setImage()
+        setWallpaperLastRun()
         checkDay()
     }
+
+    private fun setWallpaperLastRun() {
+        val date = serviceLocator.providesStorageManager().wallpaperJobLastRun
+        if (date.isNotEmpty()) {
+            timestampTextView.fadeOut()
+            timestampTextView.text = "Last run: $date"
+            timestampTextView.fadeIn()
+        }
+    }
+
 
     private fun initUi() {
         image = findViewById(R.id.image)

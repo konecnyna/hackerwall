@@ -21,7 +21,6 @@ fun URL.request(): String? {
         while (r.readLine().also { line = it } != null) {
             result.append(line).appendLine()
         }
-        Log.d("test1234", result.toString())
         result.toString()
     } catch (e: IOException) {
         e.toString()
