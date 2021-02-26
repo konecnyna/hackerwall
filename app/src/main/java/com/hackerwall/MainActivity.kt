@@ -1,14 +1,10 @@
 package com.hackerwall
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.hackerwall.base.Event
 import com.hackerwall.base.ImageManager
 import com.hackerwall.base.fadeIn
@@ -29,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var button: Button
     lateinit var calTextView: TextView
     lateinit var timestampTextView: TextView
+    lateinit var sheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         button = findViewById(R.id.button)
         calTextView = findViewById(R.id.cal)
         timestampTextView = findViewById(R.id.timestamp)
+        sheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
 
 
         button.setOnClickListener {
@@ -105,6 +103,16 @@ class MainActivity : AppCompatActivity() {
     private fun setImage() {
         imageMgr.getWallpaper {
             image.setImageDrawable(it)
+        }
+    }
+
+    fun toggleBottomSheet() {
+        if (sheetBehavior.getState() !== BottomSheetBehavior.STATE_EXPANDED) {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+            //btnBottomSheet.setText("Close sheet")
+        } else {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+//            btnBottomSheet.setText("Expand sheet")
         }
     }
 }
