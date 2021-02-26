@@ -6,7 +6,14 @@ import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.os.Build
+import android.os.PersistableBundle
+import android.util.Log
+import androidx.core.os.bundleOf
+import androidx.core.os.persistableBundleOf
 import com.hackerwall.jobs.WallpaperJobService
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 
@@ -27,8 +34,16 @@ class JobManager(private val applicationContext: Context) {
         // The JobService that we want to run
         val name = ComponentName(applicationContext, WallpaperJobService::class.java)
 
+        val time  = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss"))
+        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+        val bundle = persistableBundleOf(
+            "runDate" to  "$date $time",
+            "id" to "wallpaperjob"
+        )
+
         val jobInfo = JobInfo.Builder(WallpaperJobService.jobId, name)
             .setPeriodic(interval)
+            .setExtras(bundle)
             .setRequiredNetworkType(networkType)
             .setPersisted(isPersistent)
             .build()
@@ -36,5 +51,9 @@ class JobManager(private val applicationContext: Context) {
 
         // Schedule the job
         return jobScheduler.schedule(jobInfo)
+    }
+
+    fun nextWallpaperJob(): JobInfo {
+        return jobScheduler.allPendingJobs.find { it.extras.getString("id") == "wallpaperjob"}!!
     }
 }

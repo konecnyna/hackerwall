@@ -8,16 +8,14 @@ import android.app.job.JobParameters
 import android.app.job.JobService
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
-import com.bumptech.glide.signature.ObjectKey
 import com.hackerwall.R
+import com.hackerwall.base.Event
 import com.hackerwall.di.HackerWallApp
-import com.hackerwall.di.ServiceLocator
-import com.hackerwall.images.ESBTransformation
+import org.greenrobot.eventbus.EventBus
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
 class WallpaperJobService : JobService() {
@@ -29,11 +27,12 @@ class WallpaperJobService : JobService() {
     private val CHANNEL_ID = "main"
 
     override fun onStartJob(params: JobParameters): Boolean {
-        Log.d("test1234", "Running wallpaper job.")
+        val time  = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss"))
+        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+        EventBus.getDefault().post(Event.WallpaperJobFire("$date $time"))
 
         showNotification()
         work()
-
         return true
     }
 
@@ -49,7 +48,6 @@ class WallpaperJobService : JobService() {
         imageManager.getWallpaper {
             wallpaperManager.setWallpaper(it)
         }
-
     }
 
     private fun showNotification() {

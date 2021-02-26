@@ -1,10 +1,10 @@
 package com.hackerwall.base
 
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
+import android.view.View
+import android.view.animation.AlphaAnimation
 import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -31,7 +31,7 @@ fun URL.request(): String? {
 // parse json data
 fun String.parseJson(): List<Map<String, String>> {
     try {
-        val result = mutableListOf<Map<String,String>>()
+        val result = mutableListOf<Map<String, String>>()
         val jArr = JSONArray(this)
 
         for (i in 0 until jArr.length()) {
@@ -42,7 +42,6 @@ fun String.parseJson(): List<Map<String, String>> {
                 val key = keys.next() as String
                 val value: String = item.getString(key)
                 map[key] = value
-
             }
             result.add(map)
         }
@@ -54,3 +53,18 @@ fun String.parseJson(): List<Map<String, String>> {
     }
 }
 
+
+inline fun View.fadeIn(durationMillis: Long = 500) {
+    this.visibility = View.VISIBLE
+    this.startAnimation(AlphaAnimation(0F, 1F).apply {
+        duration = durationMillis
+        fillAfter = true
+    })
+}
+
+inline fun View.fadeOut(durationMillis: Long = 250) {
+    this.startAnimation(AlphaAnimation(1F, 0F).apply {
+        duration = durationMillis
+        fillAfter = true
+    })
+}

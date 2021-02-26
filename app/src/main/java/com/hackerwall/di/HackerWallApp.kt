@@ -1,6 +1,7 @@
 package com.hackerwall.di
 
 import android.app.Application
+import org.greenrobot.eventbus.EventBus
 
 class HackerWallApp : Application() {
 
@@ -8,6 +9,10 @@ class HackerWallApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+
+        EventBus.builder().installDefaultEventBus()
+
         serviceLocator = ServiceLocator(applicationContext)
 
         // Start jobs.
