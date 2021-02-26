@@ -6,6 +6,7 @@ import com.bumptech.glide.RequestManager
 import com.hackerwall.base.ImageManager
 import com.hackerwall.base.JobManager
 import com.hackerwall.models.DeviceInfo
+import com.hackerwall.service.EsbCalService
 import com.hackerwall.wallpaperservice.WallPaperManagerRepo
 import com.hackerwall.wallpaperservice.WallpaperManagerImpl
 
@@ -15,6 +16,7 @@ class ServiceLocator(private val applicationContext: Context) {
     private lateinit var jobManager: JobManager
     private lateinit var deviceInfo: DeviceInfo
     private lateinit var imageManager: ImageManager
+    private lateinit var esbCalService: EsbCalService
 
     fun providesGlide(): RequestManager = Glide.with(applicationContext)
 
@@ -50,5 +52,12 @@ class ServiceLocator(private val applicationContext: Context) {
         }
 
         return deviceInfo
+    }
+
+    fun providesEsbCalService(): EsbCalService {
+        if (!::esbCalService.isInitialized) {
+            esbCalService = EsbCalService()
+        }
+        return esbCalService
     }
 }
