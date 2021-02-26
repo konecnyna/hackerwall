@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
         button.setOnClickListener {
             Toast.makeText(this, "Setting new wallpaper...", Toast.LENGTH_SHORT).show()
-            imageMgr.getWallpaper {
+            imageMgr.getWallpaper(true) {
                 serviceLocator.providesWallpaperManager().setWallpaper(it)
                 setImage()
                 Toast.makeText(this, "Done!", Toast.LENGTH_SHORT).show()
