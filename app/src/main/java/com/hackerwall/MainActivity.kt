@@ -65,9 +65,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun setWallpaperLastRun() {
         val date = serviceLocator.providesStorageManager().wallpaperJobLastRun
+        val log = serviceLocator.providesStorageManager().errorLog
+
+        var msg = ""
         if (date.isNotEmpty()) {
+            msg = "Last run: $date"
+        }
+
+        if (log.isNotEmpty()) {
+            msg += "\nError: $log"
+        }
+
+        if (msg.isNotEmpty()) {
             timestampTextView.fadeOut()
-            timestampTextView.text = "Last run: $date"
+            timestampTextView.text = msg
             timestampTextView.fadeIn()
         }
     }

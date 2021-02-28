@@ -32,12 +32,17 @@ class WallpaperJobService : JobService() {
         val time = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss a"))
         val date = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
         serviceLocator.providesStorageManager().wallpaperJobLastRun = "$date $time"
+        
+        try {
+            EventBus.getDefault().post(Event.WallpaperJobFire)
 
-        EventBus.getDefault().post(Event.WallpaperJobFire)
-
-        showNotification()
-        work()
-        return true
+            showNotification()
+            work()    
+        } catch (e: Exception) {
+            serviceLocator.providesStorageManager().errorLog = e.message ?: "No error message"
+        }
+        
+        return false
     }
 
 
