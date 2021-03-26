@@ -1,6 +1,7 @@
 package com.hackerwall.base
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -11,7 +12,7 @@ import com.hackerwall.images.ESBTransformation
 class ImageManager(applicationContext: Context) {
     private val serviceLocator = (applicationContext as HackerWallApp).serviceLocator
 
-    fun getWallpaper(forceUpdate: Boolean = false, callback: (Drawable) -> Unit) {
+    fun getWallpaper(forceUpdate: Boolean = false, callback: (Bitmap) -> Unit) {
         val glide = serviceLocator.providesGlide()
         val deviceInfo = serviceLocator.provideDeviceInfo()
 //       val url = "https://home-remote-api.herokuapp.com/freedom-tower.png"
@@ -24,18 +25,16 @@ class ImageManager(applicationContext: Context) {
         }
 
         glide
+            .asBitmap()
             .load(url)
             .transform(ESBTransformation(deviceInfo))
             .signature(hourCacheKey)
-            .into(object : CustomTarget<Drawable>() {
-                override fun onLoadCleared(placeholder: Drawable?) {}
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    transition: Transition<in Drawable>?
-                ) {
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     callback(resource)
                 }
+
+                override fun onLoadCleared(placeholder: Drawable?) {}
             })
     }
 }

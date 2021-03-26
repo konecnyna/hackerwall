@@ -1,20 +1,23 @@
-package com.hackerwall
+package com.hackerwall.ui
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import com.hackerwall.R
 import com.hackerwall.base.Event
 import com.hackerwall.base.ImageManager
 import com.hackerwall.base.fadeIn
 import com.hackerwall.base.fadeOut
 import com.hackerwall.di.HackerWallApp
 import com.hackerwall.di.ServiceLocator
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageMgr: ImageManager
     private lateinit var serviceLocator: ServiceLocator
 
-    lateinit var image: ImageView
+    lateinit var image: SubsamplingScaleImageView
     lateinit var button: Button
     lateinit var calTextView: TextView
     lateinit var timestampTextView: TextView
@@ -40,6 +43,17 @@ class MainActivity : AppCompatActivity() {
         initUi()
         work()
         EventBus.getDefault().register(this)
+
+        logBtn.setOnClickListener {
+            val modalbottomSheetFragment = ModalBottomSheet()
+            modalbottomSheetFragment.show(supportFragmentManager, modalbottomSheetFragment.tag)
+        }
+
+        logBtn.setOnLongClickListener {
+            serviceLocator.provideLogger().clearLogs()
+            Snackbar.make(content, "Logs cleared", BaseTransientBottomBar.LENGTH_SHORT).show()
+            true
+        }
     }
 
     override fun onResume() {
@@ -115,7 +129,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setImage() {
         imageMgr.getWallpaper {
-            image.setImageDrawable(it)
+            image.setImage(ImageSource.bitmap(it))
         }
     }
 }

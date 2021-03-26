@@ -1,14 +1,9 @@
 package com.hackerwall.base
 
-import android.R.id
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
-import android.os.Build
-import android.os.PersistableBundle
-import android.util.Log
-import androidx.core.os.bundleOf
 import androidx.core.os.persistableBundleOf
 import com.hackerwall.jobs.WallpaperJobService
 import java.time.LocalDate
@@ -28,7 +23,7 @@ class JobManager(private val applicationContext: Context) {
     }
 
 
-    fun scheduleWallpaperJob(): Int {
+    private fun scheduleWallpaperJob(): Int {
         val interval: Long = TimeUnit.MINUTES.toMillis(15)
         val isPersistent = true
         val networkType = JobInfo.NETWORK_TYPE_ANY
@@ -55,7 +50,7 @@ class JobManager(private val applicationContext: Context) {
         return jobScheduler.schedule(jobInfo)
     }
 
-    fun nextWallpaperJob(): JobInfo? {
+    private fun nextWallpaperJob(): JobInfo? {
         return jobScheduler.allPendingJobs.find { it.id == WallpaperJobService.jobId }
     }
 }

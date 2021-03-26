@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import com.hackerwall.R
 import com.hackerwall.base.Event
 import com.hackerwall.di.HackerWallApp
+import com.hackerwall.service.Logger
 import org.greenrobot.eventbus.EventBus
 import java.time.LocalDate
 import java.time.LocalTime
@@ -29,19 +30,16 @@ class WallpaperJobService : JobService() {
     private val serviceLocator by lazy { (applicationContext as HackerWallApp).serviceLocator }
 
     override fun onStartJob(params: JobParameters): Boolean {
-        val time = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss a"))
-        val date = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
-        serviceLocator.providesStorageManager().wallpaperJobLastRun = "$date $time"
-        
+        serviceLocator.provideLogger().writeDebugLog("Ran wallpaper job")
+
         try {
             EventBus.getDefault().post(Event.WallpaperJobFire)
-
             showNotification()
-            work()    
+            work()
         } catch (e: Exception) {
-            serviceLocator.providesStorageManager().errorLog = e.message ?: "No error message"
+            serviceLocator.provideLogger().writeErrorLog("No error message")
         }
-        
+
         return false
     }
 
