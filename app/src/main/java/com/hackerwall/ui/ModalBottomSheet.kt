@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hackerwall.R
+import com.hackerwall.base.fadeIn
 import com.hackerwall.di.HackerWallApp
 import com.hackerwall.di.ServiceLocator
 import kotlinx.android.synthetic.main.bottom_sheet.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ModalBottomSheet : BottomSheetDialogFragment() {
 
@@ -26,7 +31,14 @@ class ModalBottomSheet : BottomSheetDialogFragment() {
         val serviceLocator: ServiceLocator = (requireContext().applicationContext as HackerWallApp).serviceLocator
 
         view.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        view.recyclerView.adapter = BottomSheetAdapter(serviceLocator.provideLogger().getLogs())
+        view.recyclerView.adapter = BottomSheetAdapter(listOf("Loading..."))
+        lifecycleScope.launch(Dispatchers.IO) {
+            val logs = serviceLocator.provideLogger().getLogs()
+            withContext(Dispatchers.Main) {
+                view.recyclerView.adapter = BottomSheetAdapter(logs)
+            }
+        }
+
     }
 
 

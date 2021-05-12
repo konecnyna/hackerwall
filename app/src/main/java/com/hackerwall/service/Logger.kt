@@ -14,7 +14,7 @@ class Logger(private val storageManager: StorageManager) {
 
     fun writeDebugLog(message: String) = logWithDate(LogLevel.Debug, message)
     fun writeErrorLog(message: String) = logWithDate(LogLevel.Error, message)
-    fun getLogs(): List<String> = storageManager.log.split("\n").reversed()
+    suspend fun getLogs(): List<String> = storageManager.log.split("\n").map { it.trim() }.reversed()
     fun clearLogs() { storageManager.log = "" }
 
     private fun logWithDate(level: LogLevel, message: String) {

@@ -65,19 +65,7 @@
             android:layout_marginBottom="@dimen/gutter"
             android:text="Show Log"
             app:layout_constraintBottom_toBottomOf="parent" />
-
-        <TextView
-            android:id="@+id/timestamp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:gravity="center"
-            android:textAppearance="?textAppearanceCaption"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:text="In Partnership with Fashion h"
-            tools:visibility="visible" />
+        
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include

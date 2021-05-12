@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var image: SubsamplingScaleImageView
     lateinit var button: Button
     lateinit var calTextView: TextView
-    lateinit var timestampTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +38,14 @@ class MainActivity : AppCompatActivity() {
 
         serviceLocator = (applicationContext as HackerWallApp).serviceLocator
         imageMgr = serviceLocator.providesImageManager()
+        val modalbottomSheetFragment = ModalBottomSheet()
+
 
         initUi()
         work()
         EventBus.getDefault().register(this)
 
         logBtn.setOnClickListener {
-            val modalbottomSheetFragment = ModalBottomSheet()
             modalbottomSheetFragment.show(supportFragmentManager, modalbottomSheetFragment.tag)
         }
 
@@ -90,11 +90,7 @@ class MainActivity : AppCompatActivity() {
             msg += "\nError: $log"
         }
 
-        if (msg.isNotEmpty()) {
-            timestampTextView.fadeOut()
-            timestampTextView.text = msg
-            timestampTextView.fadeIn()
-        }
+
     }
 
 
@@ -102,7 +98,6 @@ class MainActivity : AppCompatActivity() {
         image = findViewById(R.id.image)
         button = findViewById(R.id.button)
         calTextView = findViewById(R.id.cal)
-        timestampTextView = findViewById(R.id.timestamp)
 
 
         button.setOnClickListener {

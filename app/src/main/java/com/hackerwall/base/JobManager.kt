@@ -24,7 +24,7 @@ class JobManager(private val applicationContext: Context) {
 
 
     private fun scheduleWallpaperJob(): Int {
-        val interval: Long = TimeUnit.MINUTES.toMillis(15)
+        val interval: Long = TimeUnit.MINUTES.toMillis(60)
         val isPersistent = true
         val networkType = JobInfo.NETWORK_TYPE_ANY
 

@@ -12,11 +12,7 @@ import androidx.core.app.NotificationCompat
 import com.hackerwall.R
 import com.hackerwall.base.Event
 import com.hackerwall.di.HackerWallApp
-import com.hackerwall.service.Logger
 import org.greenrobot.eventbus.EventBus
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 
 class WallpaperJobService : JobService() {
