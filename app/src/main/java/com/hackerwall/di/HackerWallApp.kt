@@ -19,6 +19,6 @@ class HackerWallApp : Application() {
         serviceLocator.providesJobManager().scheduleJobs()
 
         // Log open
-        serviceLocator.provideLogger().writeDebugLog("Application created.")
+//        serviceLocator.provideLogger().writeDebugLog("Application created.")
     }
 }

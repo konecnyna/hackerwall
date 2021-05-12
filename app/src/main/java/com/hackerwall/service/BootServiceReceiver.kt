@@ -23,6 +23,14 @@ class BootServiceReceiver : BroadcastReceiver() {
 
         serviceLocator.providesJobManager().scheduleJobs()
         // Log open
+        serviceLocator.provideLogger().writeDebugLog("*********************************8")
+        serviceLocator.provideLogger().writeDebugLog("*********************************8")
+        serviceLocator.provideLogger().writeDebugLog("*********************************8")
+        serviceLocator.provideLogger().writeDebugLog("*********************************8")
         serviceLocator.provideLogger().writeDebugLog("Boot Service onReceive ${intent?.action}")
+        serviceLocator.provideLogger().writeDebugLog("*********************************8")
+        serviceLocator.provideLogger().writeDebugLog("*********************************8")
+        serviceLocator.provideLogger().writeDebugLog("*********************************8")
+        serviceLocator.provideLogger().writeDebugLog("*********************************8")
     }
 }

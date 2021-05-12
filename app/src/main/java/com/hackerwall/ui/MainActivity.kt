@@ -2,10 +2,12 @@ package com.hackerwall.ui
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageMgr: ImageManager
     private lateinit var serviceLocator: ServiceLocator
 
-    lateinit var image: SubsamplingScaleImageView
+    lateinit var image: ImageView
     lateinit var button: Button
     lateinit var calTextView: TextView
 
@@ -54,6 +56,8 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(content, "Logs cleared", BaseTransientBottomBar.LENGTH_SHORT).show()
             true
         }
+
+        serviceLocator.provideLogger().writeDebugLog("Start!")
     }
 
     override fun onResume() {
@@ -123,8 +127,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setImage() {
-        imageMgr.getWallpaper {
-            image.setImage(ImageSource.bitmap(it))
-        }
+        serviceLocator.providesGlide().load("https://home-remote-api.herokuapp.com/esb.png").into(image)
     }
 }
